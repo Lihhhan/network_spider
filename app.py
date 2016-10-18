@@ -11,7 +11,7 @@ logging.basicConfig(level=logging.DEBUG,
     filename='myapp.log',
     filemode='w')
 
-login.login()
+login.load_cookies()
 
 
 

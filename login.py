@@ -3,12 +3,13 @@ import urllib
 import urllib2
 import cookielib
 import json
-import time
+import time, logging
 from PIL import Image
 
+#第一次登陆，用验证码登陆
 def login():
     #cookie init
-    cookies = cookielib.CookieJar()
+    cookies = cookielib.MozillaCookieJar()
     opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookies))
     urllib2.install_opener(opener)
 
@@ -28,7 +29,7 @@ def login():
         if cookie.name == '_xsrf' :
             form['_xsrf'] = cookie.value
     form['password'] = ''
-    form['phone_num'] = '18742517035'
+    form['phone_num'] = ''
     form['remember_me'] = False
     form['captcha'] = captcha
 
@@ -37,11 +38,33 @@ def login():
     req=urllib2.Request('https://www.zhihu.com/login/phone_num',post_data,headers)
     content=json.load(opener.open(req))
 
-    print content
     if content['r'] == 0 :
         print content['msg']
+        cookies.save('cookie.txt', ignore_discard=True, ignore_expires=True)
+        logging.info('登陆成功')
     else: 
         if data in content: 
-            print content['msg']    
+            print content['msg']
+            logging.info('登陆失败 %s' %content['msg'])
             exit()
+
+#保存过cookie，可以直接load
+def load_cookies():
+    try:
+        # 创建MozillaCookieJar实例对象
+        cookie = cookielib.MozillaCookieJar()
+        # 从文件中读取cookie内容到变量
+        cookie.load('cookie.txt', ignore_discard=True, ignore_expires=True)
+        # 利用urllib2的build_opener方法创建一个opener
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookie))
+        urllib2.install_opener(opener)
+        print "载入cookies成功"
+        logging.info('载入cookies成功')
+    except:
+        login()
+
+
+
+
+
 
