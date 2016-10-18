@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.DEBUG,
     filemode='w')
 
 login.load_cookies()
-
+spider.run('david.dai')
 
 
 
