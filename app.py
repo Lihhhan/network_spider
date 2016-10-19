@@ -1,6 +1,7 @@
 #coding=utf-8
 import login, spider
 import sys, logging
+import conf, traceback
 
 reload(sys)
 sys.setdefaultencoding( "utf-8" )
@@ -12,8 +13,15 @@ logging.basicConfig(level=logging.DEBUG,
     filemode='w')
 
 login.load_cookies()
-spider.run('david.dai')
+#spider.run("lin-shuo-62")
 
+for person in conf.persons:
+    try:
+        logging.info('%s start..'%person)
+        spider.run(person)
+    except:
+        logging.info('%s download error, skip...\n%s'%(person, traceback.format_exc()))
+        continue
 
 
 
