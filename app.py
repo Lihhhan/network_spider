@@ -22,7 +22,7 @@ for person in conf.persons:
     except:
         logging.info('%s download error, skip...\n%s'%(person, traceback.format_exc()))
         continue
-
+logging.info('task end.')
 
 
 

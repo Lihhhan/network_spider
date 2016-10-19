@@ -39,12 +39,10 @@ def login():
     content=json.load(opener.open(req))
 
     if content['r'] == 0 :
-        print content['msg']
         cookies.save('cookie.txt', ignore_discard=True, ignore_expires=True)
         logging.info('登陆成功')
     else: 
-        if data in content: 
-            print content['msg']
+        if 'data' in content: 
             logging.info('登陆失败 %s' %content['msg'])
             exit()
 
