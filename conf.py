@@ -258,3 +258,6 @@ internet = {
 "catchen",
 "baryeah"
 }
+
+jobs = (education, sports, finacial, design, internet) 
+
