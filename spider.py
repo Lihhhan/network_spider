@@ -1,6 +1,6 @@
 #coding=utf-8
 from bs4 import BeautifulSoup
-import urllib, urllib2, time, cookielib, json, logging, traceback
+import urllib, urllib2, time, cookielib, json, logging, traceback, datetime
 import numpy as np
 
 def run(name, num=200):
@@ -16,6 +16,7 @@ def run(name, num=200):
 
     #时间部分，只关注小时
     tformat = '%H'
+    ymdformat = '%y, %m, %d'
     counter = np.zeros(24)    
     
     #数据处理
@@ -29,8 +30,13 @@ def run(name, num=200):
     activity = activitys.div
     while True:
         t = int(time.strftime(tformat, time.localtime(int(activity['data-time']))))
-        counter[t] += 1
-        if activity.next_sibling.next_sibling == None:
+        ymd = time.strftime(ymdformat, time.localtime(int(activity['data-time'])))
+        y, m, d = ymd.split(',')
+        print y,m,d
+        #只计数工作日
+        if int(datetime.datetime(int(y), int(m), int(d)).weekday()) < 5:
+            counter[t] += 1
+        if activity.next_sibling == None or activity.next_sibling.next_sibling == None:
             if np.sum(counter) >= num:
                 break
             else:
@@ -49,6 +55,8 @@ def run(name, num=200):
                 res = json.load(urllib2.urlopen(req))
 
                 activity = BeautifulSoup(res['msg'][1]).div
+                if activity == None or activity.next_sibling == None:
+                    break
                 continue
 
         activity = activity.next_sibling.next_sibling
@@ -56,14 +64,11 @@ def run(name, num=200):
    
 def f_write(name, business, counter):
     f_name = 'user_data.txt'
-    data = [0, 0, 0, 0, 0] 
-    data[0] = str(int(np.sum(counter[6:10])))
-    data[1] = str(int(np.sum(counter[11:12])))
-    data[2] = str(int(np.sum(counter[13:17])))
-    data[3] = str(int(np.sum(counter[18:22])))
-    data[4] = str(int(np.sum(counter) - np.sum(counter[6:22])))
     with open('user_data.txt', 'a') as f:
-        f.write(name + "\t" + business + "\t" + "\t".join(data) + "\t" + str(np.sum(counter)) + "\n")
+        f.write(name + "\t" + business + "\t")
+        for i in counter:
+            f.write(str(i) + "\t")
+        f.write(str(np.sum(counter)) + "\n")
     logging.info("%s download."%name) 
 
 
