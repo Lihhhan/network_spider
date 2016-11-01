@@ -259,5 +259,5 @@ internet = {
 "baryeah"
 }
 
-jobs = (education, sports, finacial, design, internet) 
+jobs = {"education":education, "sports":sports, "finacial":finacial, "design":design, "internet":internet} 
 

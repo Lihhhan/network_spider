@@ -13,12 +13,12 @@ logging.basicConfig(level=logging.DEBUG,
     filemode='a')
 
 login.load_cookies()
-#spider.run("lin-shuo-62")
-for job in conf.jobs:
+#spider.run_with_time("test","niuzijian")
+for (f_name, job) in conf.jobs.items():
     for person in job:
         try:
             logging.info('%s start..'%person)
-            spider.run(person)
+            spider.run_with_time(f_name, person)
         except:
             logging.info('%s download error, skip...\n%s'%(person, traceback.format_exc()))
             continue
