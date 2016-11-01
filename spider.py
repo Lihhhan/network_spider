@@ -96,7 +96,6 @@ def run_with_time(f_name, name, days=21):
 
     while True:
         #超过X天，break
-        print (now-int(activity['data-time'])) / (24.0*60*60) 
         if (now-int(activity['data-time'])) / (24.0*60*60) > days: 
             break
         
@@ -132,7 +131,6 @@ def run_with_time(f_name, name, days=21):
    
 def f_write(f_name, name, business, location, counter):
     #f_name = 'user_data.txt'
-    print f_name
     with open(f_name + ".txt", 'a') as f:
         f.write(name + "\t" + business + "\t" + location + '\t')
         for i in counter:
