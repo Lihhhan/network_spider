@@ -56,7 +56,7 @@ def load_cookies():
         # 利用urllib2的build_opener方法创建一个opener
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookie))
         urllib2.install_opener(opener)
-        logging.info('载入cookies成功')
+        #logging.info('载入cookies成功')
     except:
         login()
 
