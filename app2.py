@@ -40,9 +40,10 @@ while not persons.empty():
 
 
         #开始爬这个人的动态,先把他添加到处理过的人list里面
-        person_list[person] = '1'
-        logging.info(person + 'person start..')
-        spider.run_with_counter('user_data', person)
+        if person not in person_list:
+            person_list[person] = '1'
+            logging.info(person + 'person start..')
+            spider.run_with_counter('user_data', person)
     except:
         logging.info('%s error skip ..\n%s' %(person, traceback.format_exc()))
 
